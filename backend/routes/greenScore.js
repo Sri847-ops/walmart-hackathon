@@ -12,18 +12,19 @@ const systemPrompt = `You are an AI sustainability expert. Given a list of produ
 
 For each product, analyze the packaging, ingredients, and possible carbon impact. If the product has vague or insufficient information, assume average commercial packaging and logistics. Return suggestions for improving sustainability.
 
-Return ONLY the following JSON format and nothing else:
+Respond with ONLY a raw JSON string, without any explanation, tags, or formatting. Do NOT include markdown, commentary, or XML-like tags.
+
 
 {
-  "overall_score": <integer 0–100>,
+  "overall_score": 0–100,
   "products": [
     {
-      "name": "<product name>",
-      "score": <integer 0–100>,
-      "packaging_score": <0–100>,
-      "shipping_score": <0–100>,
-      "ingredients_score": <0–100>,
-      "suggestions": ["<tip1>", "<tip2>", ...]
+      "name": "product name",
+      "score": 0–100,
+      "packaging_score": 0–100,
+      "shipping_score": 0–100,
+      "ingredients_score": 0–100,
+      "suggestions": ["tip1", "tip2", ...]
     },
     ...
   ]
@@ -33,7 +34,7 @@ async function calculateGreenScore(products) {
   const messages = [
     {
       role: "system",
-      content: systemPrompt,
+      content: systemPrompt + " ONLY respond with valid JSON. DO NOT explain your reasoning or say anything outside JSON.",
     },
     {
       role: "user",
@@ -50,12 +51,35 @@ async function calculateGreenScore(products) {
       messages: messages,
     })
 
-    return JSON.parse(response.choices[0].message.content)
+    const raw = response.choices[0]?.message?.content?.trim()
+    console.log("Raw model response:\n", raw)
+
+    if (!raw) {
+      throw new Error("Empty response from AI model")
+    }
+
+    // Try to extract JSON only (between first { and last })
+    const jsonStart = raw.indexOf("{")
+    const jsonEnd = raw.lastIndexOf("}")
+    if (jsonStart === -1 || jsonEnd === -1) {
+      throw new Error("JSON not found in model response")
+    }
+
+    const jsonString = raw.slice(jsonStart, jsonEnd + 1)
+
+    try {
+      return JSON.parse(jsonString)
+    } catch (parseErr) {
+      console.error("Failed to parse cleaned JSON:\n", jsonString)
+      throw new Error("Invalid JSON format returned by AI model")
+    }
   } catch (err) {
     console.error("Error calling AI model:", err)
     return null
   }
 }
+
+
 
 // Mock function for testing without API key
 function getMockGreenScore(products) {
