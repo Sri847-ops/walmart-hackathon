@@ -10,43 +10,34 @@ const CartPage = () => {
   const [loading, setLoading] = useState(false)
 
   const calculateGreenScore = async () => {
-    setLoading(true)
-    try {
-      const products = items.map((item) => ({
-        name: item.name,
-        description: item.description,
-        packaging: item.packaging || "Standard retail packaging",
-        shipping: item.shipping || "Standard shipping",
-      }))
+  setLoading(true)
+  try {
+    const products = items.map((item) => ({
+      name: item.name,
+      description: item.description,
+      packaging: item.packaging || "Standard retail packaging",
+      shipping: item.shipping || "Standard shipping",
+      ingredients: item.ingredients || "Generic materials",
+      quantity: item.quantity || 1,
+    }))
 
-      const response = await fetch("/api/green-score/calculate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ products }),
-      })
+    const response = await fetch("/api/green-score/calculate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ products }),
+    })
 
-      const data = await response.json()
-      setGreenScore(data)
-    } catch (error) {
-      console.error("Error calculating green score:", error)
-      alert("Failed to calculate green score. Please try again.")
-    } finally {
-      setLoading(false)
-    }
+    const data = await response.json()
+    setGreenScore(data)
+  } catch (error) {
+    console.error("Error calculating green score:", error)
+    alert("Failed to calculate green score. Please try again.")
+  } finally {
+    setLoading(false)
   }
-
-  if (items.length === 0) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">Your Cart</h1>
-          <p className="text-xl text-gray-600">Your cart is empty</p>
-        </div>
-      </div>
-    )
-  }
+}
 
   return (
     <div className="container mx-auto px-4 py-8">
