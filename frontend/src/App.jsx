@@ -3,6 +3,8 @@ import { CartProvider } from "./context/CartContext"
 import Header from "./components/Header"
 import HomePage from "./pages/HomePage"
 import CartPage from "./pages/CartPage"
+import SellerPage from "./pages/SellerPage"
+import Product from "./components/Product"
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/cart" element={<CartPage />} />
+            <Route path="/seller" element={<SellerPage />} />
+            <Route path="/product/:id" element={<Product />} />
           </Routes>
         </div>
       </Router>
