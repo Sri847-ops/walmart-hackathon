@@ -8,18 +8,23 @@ const client = new OpenAI({
   apiKey: process.env.NEBIUS_API_KEY,
 })
 
-const systemPrompt = `You are an AI sustainability expert. Given a list of products, calculate a green score based on eco-friendliness, packaging material, shipping method, and sustainability of ingredients. The green score is from 0 to 100, where higher is more eco-friendly.
+// Updated system prompt that considers quantity
+const systemPrompt = `You are an AI sustainability expert. Given a list of products, calculate a green score based on eco-friendliness, packaging material, shipping method, sustainability of ingredients, and the quantity of each product.
+
+Each product has a "quantity" field. Multiply the score of each product by its quantity to determine its contribution to the overall score. The final overall score must be the weighted average based on quantity.
+
+The green score is from 0 to 100, where higher is more eco-friendly.
 
 For each product, analyze the packaging, ingredients, and possible carbon impact. If the product has vague or insufficient information, assume average commercial packaging and logistics. Return suggestions for improving sustainability.
 
 Respond with ONLY a raw JSON string, without any explanation, tags, or formatting. Do NOT include markdown, commentary, or XML-like tags.
-
 
 {
   "overall_score": 0–100,
   "products": [
     {
       "name": "product name",
+      "quantity": number,
       "score": 0–100,
       "packaging_score": 0–100,
       "shipping_score": 0–100,
@@ -34,7 +39,7 @@ async function calculateGreenScore(products) {
   const messages = [
     {
       role: "system",
-      content: systemPrompt + " ONLY respond with valid JSON. DO NOT explain your reasoning or say anything outside JSON.",
+      content: systemPrompt,
     },
     {
       role: "user",
@@ -58,7 +63,6 @@ async function calculateGreenScore(products) {
       throw new Error("Empty response from AI model")
     }
 
-    // Try to extract JSON only (between first { and last })
     const jsonStart = raw.indexOf("{")
     const jsonEnd = raw.lastIndexOf("}")
     if (jsonStart === -1 || jsonEnd === -1) {
@@ -79,9 +83,7 @@ async function calculateGreenScore(products) {
   }
 }
 
-
-
-// Mock function for testing without API key
+// Mock function for local testing
 function getMockGreenScore(products) {
   const mockScores = {
     "Organic Green Tea": { score: 85, packaging: 90, shipping: 80, ingredients: 90 },
@@ -92,9 +94,11 @@ function getMockGreenScore(products) {
   }
 
   const productScores = products.map((product) => {
+    const quantity = product.quantity || 1
     const mock = mockScores[product.name] || { score: 50, packaging: 50, shipping: 50, ingredients: 50 }
     return {
       name: product.name,
+      quantity: quantity,
       score: mock.score,
       packaging_score: mock.packaging,
       shipping_score: mock.shipping,
@@ -107,7 +111,9 @@ function getMockGreenScore(products) {
     }
   })
 
-  const overallScore = Math.round(productScores.reduce((sum, product) => sum + product.score, 0) / productScores.length)
+  const totalWeightedScore = productScores.reduce((sum, p) => sum + p.score * p.quantity, 0)
+  const totalQuantity = productScores.reduce((sum, p) => sum + p.quantity, 0)
+  const overallScore = Math.round(totalWeightedScore / totalQuantity)
 
   return {
     overall_score: overallScore,
@@ -115,7 +121,7 @@ function getMockGreenScore(products) {
   }
 }
 
-// POST /api/green-score/calculate
+// API route
 router.post("/calculate", async (req, res) => {
   try {
     const { products } = req.body
@@ -126,7 +132,6 @@ router.post("/calculate", async (req, res) => {
 
     let result
 
-    // Use real API if key is available, otherwise use mock data
     if (process.env.NEBIUS_API_KEY) {
       result = await calculateGreenScore(products)
       if (!result) {
