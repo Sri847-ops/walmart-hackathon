@@ -2,13 +2,11 @@ const express = require("express")
 const router = express.Router()
 const OpenAI = require("openai")
 
-// Initialize OpenAI client for Nebius API
 const client = new OpenAI({
   baseURL: "https://api.studio.nebius.com/v1/",
   apiKey: process.env.NEBIUS_API_KEY,
 })
 
-// Updated system prompt that considers quantity
 const systemPrompt = `You are an AI sustainability expert. Given a list of products, calculate a green score based on eco-friendliness, packaging material, shipping method, sustainability of ingredients, and the quantity of each product.
 
 Each product has a "quantity" field. Multiply the score of each product by its quantity to determine its contribution to the overall score. The final overall score must be the weighted average based on quantity.
@@ -37,14 +35,8 @@ Respond with ONLY a raw JSON string, without any explanation, tags, or formattin
 
 async function calculateGreenScore(products) {
   const messages = [
-    {
-      role: "system",
-      content: systemPrompt,
-    },
-    {
-      role: "user",
-      content: JSON.stringify(products),
-    },
+    { role: "system", content: systemPrompt },
+    { role: "user", content: JSON.stringify(products) },
   ]
 
   try {
@@ -59,9 +51,7 @@ async function calculateGreenScore(products) {
     const raw = response.choices[0]?.message?.content?.trim()
     console.log("Raw model response:\n", raw)
 
-    if (!raw) {
-      throw new Error("Empty response from AI model")
-    }
+    if (!raw) throw new Error("Empty response from AI model")
 
     const jsonStart = raw.indexOf("{")
     const jsonEnd = raw.lastIndexOf("}")
@@ -70,20 +60,30 @@ async function calculateGreenScore(products) {
     }
 
     const jsonString = raw.slice(jsonStart, jsonEnd + 1)
+    const parsed = JSON.parse(jsonString)
 
-    try {
-      return JSON.parse(jsonString)
-    } catch (parseErr) {
-      console.error("Failed to parse cleaned JSON:\n", jsonString)
-      throw new Error("Invalid JSON format returned by AI model")
-    }
+    // Inject coins calculation here
+    parsed.total_coins = calculateEcoCoins(parsed.products)
+
+    return parsed
   } catch (err) {
     console.error("Error calling AI model:", err)
     return null
   }
 }
 
-// Mock function for local testing
+function calculateEcoCoins(products, multiplier = 2) {
+  if (!products || !Array.isArray(products)) return 0
+
+  let total = 0
+  for (const product of products) {
+    if (product.score >= 30) {
+      total += (product.score / 100) * product.quantity * multiplier
+    }
+  }
+  return Math.round(total)
+}
+
 function getMockGreenScore(products) {
   const mockScores = {
     "Organic Green Tea": { score: 85, packaging: 90, shipping: 80, ingredients: 90 },
@@ -96,9 +96,10 @@ function getMockGreenScore(products) {
   const productScores = products.map((product) => {
     const quantity = product.quantity || 1
     const mock = mockScores[product.name] || { score: 50, packaging: 50, shipping: 50, ingredients: 50 }
+
     return {
       name: product.name,
-      quantity: quantity,
+      quantity,
       score: mock.score,
       packaging_score: mock.packaging,
       shipping_score: mock.shipping,
@@ -115,13 +116,16 @@ function getMockGreenScore(products) {
   const totalQuantity = productScores.reduce((sum, p) => sum + p.quantity, 0)
   const overallScore = Math.round(totalWeightedScore / totalQuantity)
 
+  const totalCoins = calculateEcoCoins(productScores)
+
   return {
     overall_score: overallScore,
     products: productScores,
+    total_coins: totalCoins,
   }
 }
 
-// API route
+// Route
 router.post("/calculate", async (req, res) => {
   try {
     const { products } = req.body
@@ -131,7 +135,6 @@ router.post("/calculate", async (req, res) => {
     }
 
     let result
-
     if (process.env.NEBIUS_API_KEY) {
       result = await calculateGreenScore(products)
       if (!result) {

@@ -36,6 +36,16 @@ const GreenScoreResults = ({ data }) => {
             ? "Good, but room for improvement"
             : "Consider more eco-friendly alternatives"}
         </p>
+
+        {/* Eco-Coins Earned */}
+        {typeof data.total_coins === "number" && (
+          <div className="mt-4">
+            <p className="text-lg font-medium text-gray-700">
+              🎁 Eco-Coins Earned:{" "}
+              <span className="text-green-700 font-bold">{data.total_coins}</span>
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Individual Product Scores */}
@@ -68,6 +78,10 @@ const GreenScoreResults = ({ data }) => {
                 <span className={getScoreColor(product.ingredients_score)}>
                   {product.ingredients_score}/100
                 </span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span>Quantity:</span>
+                <span className="text-gray-800">{product.quantity}</span>
               </div>
             </div>
 
