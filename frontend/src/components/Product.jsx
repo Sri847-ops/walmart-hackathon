@@ -9,6 +9,10 @@ const DUMMY_PRODUCTS = [
     description: "Fresh organic green tea leaves, no preservatives.",
     packaging: "Compostable paper",
     shipping: "Local delivery",
+    initialPrice: 12.99,
+    timeToExpiry: 10,
+    reductionPerDay: 0.05,
+    dynamicPricing: false,
   },
   {
     id: 2,
@@ -17,6 +21,10 @@ const DUMMY_PRODUCTS = [
     description: "Single-use plastic bottle with mineral water.",
     packaging: "Plastic",
     shipping: "International",
+    initialPrice: 12.99,
+    timeToExpiry: 10,
+    reductionPerDay: 0.05,
+    dynamicPricing: false,
   },
   {
     id: 3,
@@ -25,6 +33,10 @@ const DUMMY_PRODUCTS = [
     description: "Biodegradable bamboo handle with soft charcoal bristles.",
     packaging: "Recyclable cardboard",
     shipping: "Local",
+    initialPrice: 12.99,
+    timeToExpiry: 10,
+    reductionPerDay: 0.05,
+    dynamicPricing: false,
   },
   {
     id: 4,
@@ -33,6 +45,10 @@ const DUMMY_PRODUCTS = [
     description: "Energy-efficient LED bulb, 10-year lifespan.",
     packaging: "Recyclable cardboard",
     shipping: "Standard",
+    initialPrice: 12.99,
+    timeToExpiry: 10,
+    reductionPerDay: 0.05,
+    dynamicPricing: false,
   },
   {
     id: 5,
@@ -41,6 +57,10 @@ const DUMMY_PRODUCTS = [
     description: "100% organic cotton, fair trade certified.",
     packaging: "Biodegradable bag",
     shipping: "Carbon-neutral",
+    initialPrice: 12.99,
+    timeToExpiry: 10,
+    reductionPerDay: 0.05,
+    dynamicPricing: false,
   },
   {
     id: 6,
@@ -49,6 +69,10 @@ const DUMMY_PRODUCTS = [
     description: "Stainless steel, BPA-free, keeps drinks cold for 24 hours.",
     packaging: "Minimal cardboard",
     shipping: "Local",
+    initialPrice: 12.99,
+    timeToExpiry: 10,
+    reductionPerDay: 0.05,
+    dynamicPricing: false,
   },
 ]
 
