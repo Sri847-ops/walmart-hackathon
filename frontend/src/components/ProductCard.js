@@ -2,6 +2,19 @@
 import { Link } from "react-router-dom"
 import { useCart } from "../context/CartContext"
 
+const calculateDynamicPrice = (product) => {
+  if (!product.dynamicPricing || product.timeToExpiry == null || product.reductionPerDay == null) {
+    return product.price
+  }
+
+  const daysPassed = Math.max(0, 10 - product.timeToExpiry)
+  const discount = product.initialPrice * product.reductionPerDay * daysPassed
+  const discountedPrice = product.initialPrice - discount
+  const minPrice = product.initialPrice * 0.4
+
+  return Math.max(discountedPrice, minPrice)
+}
+
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart()
 
@@ -10,6 +23,8 @@ const ProductCard = ({ product }) => {
     e.preventDefault()
     addToCart(product)
   }
+
+  const dynamicPrice = calculateDynamicPrice(product)
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow cursor-pointer">
@@ -23,7 +38,9 @@ const ProductCard = ({ product }) => {
         </div>
       </Link>
       <div className="px-4 pb-4 flex items-center justify-between">
-        <span className="text-2xl font-bold text-green-600">${product.price.toFixed(2)}</span>
+        <span className="text-2xl font-bold text-green-600">
+          ${dynamicPrice.toFixed(2)}
+        </span>
         <button
           onClick={handleAddToCart}
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors"
@@ -36,4 +53,3 @@ const ProductCard = ({ product }) => {
 }
 
 export default ProductCard
-
