@@ -1,6 +1,10 @@
-const express = require("express")
+import express from "express"
+import OpenAI from "openai"
+import dotenv from "dotenv"
+
+dotenv.config()
+
 const router = express.Router()
-const OpenAI = require("openai")
 
 const client = new OpenAI({
   baseURL: "https://api.studio.nebius.com/v1/",
@@ -152,4 +156,4 @@ router.post("/calculate", async (req, res) => {
   }
 })
 
-module.exports = router
+export default router
