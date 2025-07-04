@@ -4,6 +4,7 @@ import dotenv from "dotenv"
 import connectDB from "./config/db.js"
 import greenScoreRoutes from "./routes/greenScore.js"
 import productRoutes from "./routes/productRoutes.js" // Add this import
+import authRoutes from "./routes/auth.js" // Import auth routes if needed
 import { OpenAI } from "openai"
 
 // Load environment variables
@@ -22,7 +23,7 @@ app.use(express.json())
 // Routes
 app.use("/api/green-score", greenScoreRoutes)
 app.use("/api/products", productRoutes) // Add this line after your other app.use() routes
-
+app.use("/api/auth", authRoutes)
 // Basic route
 app.get("/", (req, res) => {
   res.json({ message: "Walmart Green E-commerce Backend API" })

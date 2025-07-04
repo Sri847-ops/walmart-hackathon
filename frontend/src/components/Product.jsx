@@ -1,96 +1,40 @@
-import { useParams } from "react-router-dom"
-import { useEffect, useState } from "react"
-import products from "../data/products"
-// const DUMMY_PRODUCTS = [
-//   {
-//     id: 1,
-//     name: "Organic Green Tea",
-//     price: 12.99,
-//     description: "Fresh organic green tea leaves, no preservatives.",
-//     packaging: "Compostable paper",
-//     shipping: "Local delivery",
-//     initialPrice: 12.99,
-//     timeToExpiry: 10,
-//     reductionPerDay: 0.05,
-//     dynamicPricing: false,
-//   },
-//   {
-//     id: 2,
-//     name: "Plastic Water Bottle",
-//     price: 1.99,
-//     description: "Single-use plastic bottle with mineral water.",
-//     packaging: "Plastic",
-//     shipping: "International",
-//     initialPrice: 12.99,
-//     timeToExpiry: 10,
-//     reductionPerDay: 0.05,
-//     dynamicPricing: false,
-//   },
-//   {
-//     id: 3,
-//     name: "Bamboo Toothbrush",
-//     price: 8.99,
-//     description: "Biodegradable bamboo handle with soft charcoal bristles.",
-//     packaging: "Recyclable cardboard",
-//     shipping: "Local",
-//     initialPrice: 12.99,
-//     timeToExpiry: 10,
-//     reductionPerDay: 0.05,
-//     dynamicPricing: false,
-//   },
-//   {
-//     id: 4,
-//     name: "LED Light Bulb",
-//     price: 15.99,
-//     description: "Energy-efficient LED bulb, 10-year lifespan.",
-//     packaging: "Recyclable cardboard",
-//     shipping: "Standard",
-//     initialPrice: 12.99,
-//     timeToExpiry: 10,
-//     reductionPerDay: 0.05,
-//     dynamicPricing: false,
-//   },
-//   {
-//     id: 5,
-//     name: "Organic Cotton T-Shirt",
-//     price: 24.99,
-//     description: "100% organic cotton, fair trade certified.",
-//     packaging: "Biodegradable bag",
-//     shipping: "Carbon-neutral",
-//     initialPrice: 12.99,
-//     timeToExpiry: 10,
-//     reductionPerDay: 0.05,
-//     dynamicPricing: false,
-//   },
-//   {
-//     id: 6,
-//     name: "Reusable Water Bottle",
-//     price: 19.99,
-//     description: "Stainless steel, BPA-free, keeps drinks cold for 24 hours.",
-//     packaging: "Minimal cardboard",
-//     shipping: "Local",
-//     initialPrice: 12.99,
-//     timeToExpiry: 10,
-//     reductionPerDay: 0.05,
-//     dynamicPricing: false,
-//   },
-// ]
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Product = () => {
-  const { id } = useParams()
-  const [product, setProduct] = useState(null)
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const found = products.find((p) => p.id === parseInt(id))
-    setProduct(found)
-  }, [id])
+    setLoading(true);
+    setError(null);
+    fetch(`http://localhost:5000/api/products/${id}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Product not found");
+        return res.json();
+      })
+      .then((data) => {
+        setProduct(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) {
+    return <div className="text-center py-20 text-gray-600 text-xl">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-20 text-red-600 text-xl">{error}</div>;
+  }
 
   if (!product) {
-    return (
-      <div className="text-center py-20 text-gray-600 text-xl">
-        Product not found.
-      </div>
-    )
+    return <div className="text-center py-20 text-gray-600 text-xl">Product not found.</div>;
   }
 
   return (
@@ -112,13 +56,13 @@ const Product = () => {
               <span className="text-gray-700">{product.shipping}</span>
             </div>
             <div className="text-2xl font-semibold text-green-600 mt-6">
-              ${product.price.toFixed(2)}
+              ${product.price?.toFixed(2)}
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Product
+export default Product;

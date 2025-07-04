@@ -5,15 +5,64 @@ import { useState } from "react"
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [loginType, setLoginType] = useState("user")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleTabClick = (type) => {
+    setLoginType(type);
+    setEmail("");
+    setPassword("");
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    const formData = new FormData(event.currentTarget)
-    const email = formData.get("email")
-    const password = formData.get("password")
 
-    console.log("Login attempt:", { email, password, loginType })
-    // Handle login logic here
+    const formLoginType = loginType || "user";
+    const trimmedLoginType = formLoginType.trim();
+    console.log("loginType from form:", formLoginType, "trimmed:", trimmedLoginType);
+
+    // Validate login type
+    if (trimmedLoginType !== "user" && trimmedLoginType !== "seller") {
+      alert("Invalid login type selected. Please select either 'User' or 'Seller'.")
+      return
+    }
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password, loginType: trimmedLoginType }),
+      })
+
+      const data = await res.json()
+
+      if (res.ok) {
+        console.log("Login successful:", data);
+
+        // Save token to localStorage
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+        }
+        if (data.user) {
+          localStorage.setItem("user", JSON.stringify(data.user));
+        }
+
+        // Redirect based on loginType
+        if (trimmedLoginType === "user") {
+          window.location.href = "/";
+        } else {
+          window.location.href = "/seller";
+        }
+      } else {
+        alert(data.message || "Login failed.")
+        console.error("Login failed:", data.message || "Unknown error")
+      }
+    } catch (err) {
+      alert("An error occurred during login. Please try again.")
+      console.error("Error while logging in:", err.message)
+    }
   }
 
   const styles = {
@@ -213,20 +262,22 @@ export default function LoginPage() {
         <div style={styles.content}>
           <div style={styles.tabs}>
             <button
+              type="button"
               style={{
                 ...styles.tab,
                 ...(loginType === "user" ? styles.activeTab : {}),
               }}
-              onClick={() => setLoginType("user")}
+              onClick={() => handleTabClick("user")}
             >
               👤 Customer
             </button>
             <button
+              type="button"
               style={{
                 ...styles.tab,
                 ...(loginType === "seller" ? styles.activeTab : {}),
               }}
-              onClick={() => setLoginType("seller")}
+              onClick={() => handleTabClick("seller")}
             >
               🏪 Seller
             </button>
@@ -244,6 +295,8 @@ export default function LoginPage() {
                 placeholder={loginType === "user" ? "customer@example.com" : "seller@business.com"}
                 required
                 style={styles.input}
+                value={email}
+                onChange={e => setEmail(e.target.value)}
                 onFocus={(e) => Object.assign(e.target.style, styles.inputFocus)}
                 onBlur={(e) => Object.assign(e.target.style, styles.input)}
               />
@@ -269,6 +322,8 @@ export default function LoginPage() {
                   placeholder="Enter your password"
                   required
                   style={styles.input}
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
                   onFocus={(e) => Object.assign(e.target.style, styles.inputFocus)}
                   onBlur={(e) => Object.assign(e.target.style, styles.input)}
                 />

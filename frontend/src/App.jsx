@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom"
 import { CartProvider } from "./context/CartContext"
 import Header from "./components/Header"
 import HomePage from "./pages/HomePage"
@@ -7,22 +7,56 @@ import SellerPage from "./pages/SellerPage"
 import Product from "./components/Product"
 import SellerProduct from "./components/seller/SellerProduct"
 import LoginPage from "./pages/LoginPage"
+import PrivateRoutes from "./PrivateRoute"
+import UserPrivateRoute from "./UserPrivateRoute"
+import SellerPrivateRoute from "./SellerPrivateRoute"
+
+function AppContent() {
+  const location = useLocation()
+  const hideHeader = location.pathname === "/login"
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {!hideHeader && <Header />}
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        {/* User-only routes */}
+        <Route path="/" element={
+          <UserPrivateRoute>
+            <HomePage />
+          </UserPrivateRoute>
+        } />
+        <Route path="/cart" element={
+          <UserPrivateRoute>
+            <CartPage />
+          </UserPrivateRoute>
+        } />
+        <Route path="/product/:id" element={
+          <UserPrivateRoute>
+            <Product />
+          </UserPrivateRoute>
+        } />
+        {/* Seller-only routes */}
+        <Route path="/seller" element={
+          <SellerPrivateRoute>
+            <SellerPage />
+          </SellerPrivateRoute>
+        } />
+        <Route path="/seller/product/:id" element={
+          <SellerPrivateRoute>
+            <SellerProduct />
+          </SellerPrivateRoute>
+        } />
+      </Routes>
+    </div>
+  )
+}
 
 function App() {
   return (
     <CartProvider>
       <Router>
-        <div className="min-h-screen bg-gray-50">
-          <Header />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/seller" element={<SellerPage />} />
-            <Route path="/product/:id" element={<Product />} />
-            <Route path="/seller/product/:id" element={<SellerProduct />} />
-          </Routes>
-        </div>
+        <AppContent />
       </Router>
     </CartProvider>
   )
