@@ -48,6 +48,9 @@ export default function LoginPage() {
         if (data.user) {
           localStorage.setItem("user", JSON.stringify(data.user));
         }
+        if (data.user && data.user.loginType) {
+          localStorage.setItem("role", data.user.loginType);
+        }
 
         // Redirect based on loginType
         if (trimmedLoginType === "user") {

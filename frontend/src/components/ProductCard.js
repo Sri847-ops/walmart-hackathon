@@ -21,7 +21,7 @@ const ProductCard = ({ product }) => {
   const handleAddToCart = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    addToCart(product)
+    addToCart({ ...product, id: product._id })
   }
 
   const dynamicPrice = calculateDynamicPrice(product)
