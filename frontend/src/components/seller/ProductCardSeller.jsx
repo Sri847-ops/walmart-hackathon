@@ -6,18 +6,18 @@ const ProductCardSeller = ({ product, onDelete }) => {
 
   const handleEdit = (e) => {
     e.stopPropagation() // Prevent card click
-    navigate(`/seller/edit/${product.id}`)
+    navigate(`/seller/edit/${product._id}`)
   }
 
   const handleDelete = (e) => {
     e.stopPropagation() // Prevent card click
     if (window.confirm("Are you sure you want to delete this product?")) {
-      onDelete(product.id)
+      onDelete(product._id)
     }
   }
 
   const handleCardClick = () => {
-    navigate(`/seller/product/${product.id}`)
+    navigate(`/seller/product/${product._id}`)
   }
 
   return (

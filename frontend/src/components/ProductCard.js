@@ -21,14 +21,14 @@ const ProductCard = ({ product }) => {
   const handleAddToCart = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    addToCart(product)
+    addToCart({ ...product, id: product._id })
   }
 
   const dynamicPrice = calculateDynamicPrice(product)
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow cursor-pointer">
-      <Link to={`/product/${product.id}`} className="block">
+      <Link to={`/product/${product._id}`} className="block">
         <div className="h-48 bg-gray-200 flex items-center justify-center">
           <span className="text-gray-500 text-4xl">📦</span>
         </div>
