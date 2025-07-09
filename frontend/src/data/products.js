@@ -10,6 +10,7 @@ const products = [
     timeToExpiry: 10,
     reductionPerDay: 0.05,
     dynamicPricing: false,
+    category: "Groceries",
   },
   {
     id: 2,
@@ -22,6 +23,7 @@ const products = [
     timeToExpiry: 10,
     reductionPerDay: 0.05,
     dynamicPricing: false,
+    category: "Groceries",
   },
   {
     id: 3,
@@ -34,6 +36,7 @@ const products = [
     timeToExpiry: 10,
     reductionPerDay: 0.05,
     dynamicPricing: false,
+    category: "Personal Care",
   },
   {
     id: 4,
@@ -46,6 +49,7 @@ const products = [
     timeToExpiry: 10,
     reductionPerDay: 0.05,
     dynamicPricing: false,
+    category: "Home Goods",
   },
   {
     id: 5,
@@ -58,6 +62,7 @@ const products = [
     timeToExpiry: 10,
     reductionPerDay: 0.05,
     dynamicPricing: false,
+    category: "Apparel",
   },
   {
     id: 6,
@@ -70,8 +75,9 @@ const products = [
     timeToExpiry: 10,
     reductionPerDay: 0.05,
     dynamicPricing: false,
+    category: "Kitchen",
   },
-    {
+  {
     id: 7,
     name: "Lotion",
     price: 19.99,
@@ -82,7 +88,8 @@ const products = [
     timeToExpiry: 10,
     reductionPerDay: 0.05,
     dynamicPricing: false,
+    category: "Personal Care",
   },
-]
+];
 
 export default products;
