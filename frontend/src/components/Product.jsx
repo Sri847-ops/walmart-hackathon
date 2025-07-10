@@ -55,8 +55,20 @@ const Product = () => {
               <span className="text-gray-500 font-medium">Shipping:</span>{" "}
               <span className="text-gray-700">{product.shipping}</span>
             </div>
-            <div className="text-2xl font-semibold text-green-600 mt-6">
-              ${product.price?.toFixed(2)}
+            <div className="mt-6">
+              {product.discountPercentage > 0 && (
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-2xl text-gray-500 line-through">
+                    ${product.initialPrice.toFixed(2)}
+                  </span>
+                  <span className="text-base font-bold text-green-600 bg-green-100 px-3 py-1 rounded-full">
+                    {product.discountPercentage}% OFF
+                  </span>
+                </div>
+              )}
+              <div className="text-4xl font-bold text-green-600">
+                ${product.price?.toFixed(2)}
+              </div>
             </div>
           </div>
         </div>

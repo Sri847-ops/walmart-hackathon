@@ -42,22 +42,30 @@ const SellerProduct = () => {
     alert(`Donated "${product.name}" to NGOs!`);
   };
 
-  const toggleDynamicPricing = () => {
-    setProduct((prev) => ({
-      ...prev,
-      dynamicPricing: !prev.dynamicPricing,
-    }));
-  };
+  const toggleDynamicPricing = async () => {
+    const updatedDynamicPricing = !product.dynamicPricing;
+    try {
+      const response = await fetch(`http://localhost:5000/api/products/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ dynamicPricing: updatedDynamicPricing }),
+      });
 
-  const calculateDynamicPrice = (p) => {
-    if (!p.dynamicPricing || p.timeToExpiry == null || p.reductionPerDay == null) {
-      return p.price;
+      if (!response.ok) {
+        throw new Error('Failed to update dynamic pricing');
+      }
+
+      setProduct((prev) => ({
+        ...prev,
+        dynamicPricing: updatedDynamicPricing,
+      }));
+      alert('Dynamic pricing updated successfully!');
+    } catch (error) {
+      console.error('Error updating dynamic pricing:', error);
+      alert('Failed to update dynamic pricing. Please try again.');
     }
-    const daysPassed = Math.max(0, 10 - p.timeToExpiry);
-    const discount = p.initialPrice * p.reductionPerDay * daysPassed;
-    const discountedPrice = p.initialPrice - discount;
-    const minPrice = p.initialPrice * 0.4;
-    return Math.max(discountedPrice, minPrice);
   };
 
   if (loading) {
@@ -71,8 +79,6 @@ const SellerProduct = () => {
       </div>
     );
   }
-
-  const dynamicPrice = calculateDynamicPrice(product);
 
   return (
     <div className="max-w-3xl mx-auto p-8 bg-card rounded-xl shadow-lg mt-10">
@@ -88,14 +94,19 @@ const SellerProduct = () => {
           <span className="text-muted-foreground block text-sm">
             Current Price
           </span>
-          <span className="text-xl font-bold text-primary">
-            ${dynamicPrice.toFixed(2)}
-          </span>
-          {product.dynamicPricing && (
-            <p className="text-sm text-muted-foreground mt-1">
-              Dynamic (min: ${(product.initialPrice * 0.4).toFixed(2)})
-            </p>
+          {product.discountPercentage > 0 && (
+            <div className="flex items-center justify-center gap-2 mt-1">
+              <span className="text-lg text-muted-foreground line-through">
+                ${product.initialPrice.toFixed(2)}
+              </span>
+              <span className="text-xs font-bold text-green-600 bg-green-100 px-2 py-1 rounded-md">
+                {product.discountPercentage}% OFF
+              </span>
+            </div>
           )}
+          <span className="text-2xl font-bold text-primary">
+            ${product.price.toFixed(2)}
+          </span>
         </div>
         <div>
           <span className="text-muted-foreground block text-sm">Shipping</span>

@@ -1,23 +1,43 @@
-import express from "express"
-import Product from "../models/Product.js" // Adjust path if needed
-import mongoose from "mongoose"
-const router = express.Router()
+import express from "express";
+import Product from "../models/Product.js";
+import mongoose from "mongoose";
+import { calculateDynamicPrice } from "../utils/priceCalculator.js";
+
+const router = express.Router();
 
 // GET /api/products
 router.get("/", async (req, res) => {
   try {
-    const products = await Product.find()
-    res.json(products)
+    const products = await Product.find();
+    const productsWithDynamicPrice = products.map((product) => {
+      const { currentPrice, discountPercentage } = calculateDynamicPrice(product);
+      return {
+        ...product.toObject(),
+        price: currentPrice,
+        discountPercentage,
+      };
+    });
+    res.json(productsWithDynamicPrice);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching products", error })
+    res.status(500).json({ message: "Error fetching products", error });
   }
-})
+});
 
 // GET /api/products/seller/:sellerId
 router.get("/seller/:sellerId", async (req, res) => {
   try {
-    const products = await Product.find({ sellerId: new mongoose.Types.ObjectId(req.params.sellerId) });
-    res.json(products);
+    const products = await Product.find({
+      sellerId: new mongoose.Types.ObjectId(req.params.sellerId),
+    });
+    const productsWithDynamicPrice = products.map((product) => {
+      const { currentPrice, discountPercentage } = calculateDynamicPrice(product);
+      return {
+        ...product.toObject(),
+        price: currentPrice,
+        discountPercentage,
+      };
+    });
+    res.json(productsWithDynamicPrice);
   } catch (error) {
     res.status(500).json({ message: "Error fetching seller's products", error });
   }
@@ -30,10 +50,31 @@ router.get("/:id", async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
-    res.json(product);
+    const { currentPrice, discountPercentage } = calculateDynamicPrice(product);
+    res.json({
+      ...product.toObject(),
+      price: currentPrice,
+      discountPercentage,
+    });
   } catch (error) {
     res.status(500).json({ message: "Error fetching product", error });
   }
 });
 
-export default router
+// PUT /api/products/:id
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedProduct = await Product.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.json(updatedProduct);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating product", error });
+  }
+});
+
+export default router;
