@@ -68,269 +68,103 @@ export default function LoginPage() {
     }
   }
 
-  const styles = {
-    container: {
-      minHeight: "100vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      background: "linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%)",
-      padding: "1rem",
-      fontFamily: "system-ui, -apple-system, sans-serif",
-    },
-    card: {
-      width: "100%",
-      maxWidth: "400px",
-      backgroundColor: "white",
-      borderRadius: "12px",
-      boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
-      overflow: "hidden",
-    },
-    header: {
-      padding: "2rem 2rem 1rem",
-      textAlign: "center",
-    },
-    logo: {
-      width: "60px",
-      height: "60px",
-      backgroundColor: "#16a34a",
-      borderRadius: "50%",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      margin: "0 auto 1rem",
-      color: "white",
-      fontSize: "24px",
-    },
-    title: {
-      fontSize: "1.75rem",
-      fontWeight: "bold",
-      color: "#166534",
-      margin: "0 0 0.5rem",
-    },
-    subtitle: {
-      color: "#6b7280",
-      fontSize: "0.875rem",
-      margin: 0,
-    },
-    content: {
-      padding: "0 2rem 2rem",
-    },
-    tabs: {
-      display: "flex",
-      backgroundColor: "#f3f4f6",
-      borderRadius: "8px",
-      padding: "4px",
-      marginBottom: "1.5rem",
-    },
-    tab: {
-      flex: 1,
-      padding: "0.75rem",
-      textAlign: "center",
-      border: "none",
-      backgroundColor: "transparent",
-      borderRadius: "6px",
-      cursor: "pointer",
-      fontSize: "0.875rem",
-      fontWeight: "500",
-      transition: "all 0.2s",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: "0.5rem",
-    },
-    activeTab: {
-      backgroundColor: "white",
-      color: "#16a34a",
-      boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-    },
-    form: {
-      display: "flex",
-      flexDirection: "column",
-      gap: "1rem",
-    },
-    inputGroup: {
-      display: "flex",
-      flexDirection: "column",
-      gap: "0.5rem",
-    },
-    label: {
-      fontSize: "0.875rem",
-      fontWeight: "500",
-      color: "#374151",
-    },
-    input: {
-      width: "100%",
-      padding: "0.75rem",
-      border: "1px solid #d1d5db",
-      borderRadius: "6px",
-      fontSize: "0.875rem",
-      transition: "border-color 0.2s",
-      boxSizing: "border-box",
-    },
-    inputFocus: {
-      outline: "none",
-      borderColor: "#16a34a",
-      boxShadow: "0 0 0 3px rgba(22, 163, 74, 0.1)",
-    },
-    passwordContainer: {
-      position: "relative",
-    },
-    passwordToggle: {
-      position: "absolute",
-      right: "0.75rem",
-      top: "50%",
-      transform: "translateY(-50%)",
-      background: "none",
-      border: "none",
-      cursor: "pointer",
-      color: "#6b7280",
-      fontSize: "1rem",
-    },
-    forgotPassword: {
-      fontSize: "0.75rem",
-      color: "#16a34a",
-      textDecoration: "none",
-      alignSelf: "flex-end",
-    },
-    submitButton: {
-      width: "100%",
-      padding: "0.75rem",
-      backgroundColor: "#16a34a",
-      color: "white",
-      border: "none",
-      borderRadius: "6px",
-      fontSize: "0.875rem",
-      fontWeight: "500",
-      cursor: "pointer",
-      transition: "background-color 0.2s",
-    },
-    submitButtonHover: {
-      backgroundColor: "#15803d",
-    },
-    divider: {
-      margin: "1.5rem 0",
-      textAlign: "center",
-      position: "relative",
-      color: "#6b7280",
-      fontSize: "0.75rem",
-    },
-    dividerLine: {
-      position: "absolute",
-      top: "100%",
-      left: 0,
-      right: 0,
-      height: "1px",
-      backgroundColor: "#e5e7eb",
-    },
-    dividerText: {
-      backgroundColor: "white",
-      padding: "0 1rem",
-    },
-    googleButton: {
-      width: "100%",
-      padding: "0.75rem",
-      border: "1px solid #d1d5db",
-      backgroundColor: "white",
-      borderRadius: "6px",
-      fontSize: "0.875rem",
-      cursor: "pointer",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: "0.5rem",
-      transition: "background-color 0.2s",
-    },
-    footer: {
-      marginTop: "1.5rem",
-      textAlign: "center",
-      fontSize: "0.75rem",
-      color: "#6b7280",
-    },
-    link: {
-      color: "#16a34a",
-      textDecoration: "none",
-    },
-  }
-
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <div style={styles.header}>
-          <div style={styles.logo}>🏪</div>
-          <h1 style={styles.title}>Welcome to GreenMart</h1>
-          <p style={styles.subtitle}>Sign in to your account to continue</p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-50 to-emerald-100 p-4 font-sans">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div className="p-8 text-center">
+          <div className="mx-auto mb-4 w-16 h-16 bg-green-600 rounded-full flex items-center justify-center text-white text-3xl">
+            🏪
+          </div>
+          <h1 className="text-3xl font-bold text-green-800">
+            Welcome to GreenMart
+          </h1>
+          <p className="text-gray-500 text-sm">
+            Sign in to your account to continue
+          </p>
         </div>
 
-        <div style={styles.content}>
-          <div style={styles.tabs}>
+        <div className="px-8 pb-8">
+          <div className="flex bg-gray-100 rounded-lg p-1 mb-6">
             <button
               type="button"
-              style={{
-                ...styles.tab,
-                ...(loginType === "user" ? styles.activeTab : {}),
-              }}
+              className={`flex-1 p-2 text-center rounded-md text-sm font-medium transition-all flex items-center justify-center gap-2 ${
+                loginType === "user"
+                  ? "bg-white text-green-600 shadow"
+                  : "text-gray-500"
+              }`}
               onClick={() => handleTabClick("user")}
             >
               👤 Customer
             </button>
             <button
               type="button"
-              style={{
-                ...styles.tab,
-                ...(loginType === "seller" ? styles.activeTab : {}),
-              }}
+              className={`flex-1 p-2 text-center rounded-md text-sm font-medium transition-all flex items-center justify-center gap-2 ${
+                loginType === "seller"
+                  ? "bg-white text-green-600 shadow"
+                  : "text-gray-500"
+              }`}
               onClick={() => handleTabClick("seller")}
             >
               🏪 Seller
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} style={styles.form}>
-            <div style={styles.inputGroup}>
-              <label style={styles.label} htmlFor="email">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-700" htmlFor="email">
                 {loginType === "user" ? "Email" : "Business Email"}
               </label>
               <input
                 id="email"
                 name="email"
                 type="email"
-                placeholder={loginType === "user" ? "customer@example.com" : "seller@business.com"}
+                placeholder={
+                  loginType === "user"
+                    ? "customer@example.com"
+                    : "seller@business.com"
+                }
                 required
-                style={styles.input}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
-                onFocus={(e) => Object.assign(e.target.style, styles.inputFocus)}
-                onBlur={(e) => Object.assign(e.target.style, styles.input)}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
-            <div style={styles.inputGroup}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <label style={styles.label} htmlFor="password">
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between items-center">
+                <label
+                  className="text-sm font-medium text-gray-700"
+                  htmlFor="password"
+                >
                   Password
                 </label>
                 <a
-                  href={loginType === "user" ? "/forgot-password" : "/seller/forgot-password"}
-                  style={styles.forgotPassword}
+                  href={
+                    loginType === "user"
+                      ? "/forgot-password"
+                      : "/seller/forgot-password"
+                  }
+                  className="text-xs text-green-600 hover:underline"
                 >
                   Forgot password?
                 </a>
               </div>
-              <div style={styles.passwordContainer}>
+              <div className="relative">
                 <input
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
                   required
-                  style={styles.input}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
                   value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  onFocus={(e) => Object.assign(e.target.style, styles.inputFocus)}
-                  onBlur={(e) => Object.assign(e.target.style, styles.input)}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
-                <button type="button" style={styles.passwordToggle} onClick={() => setShowPassword(!showPassword)}>
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-lg"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
                   {showPassword ? "🙈" : "👁️"}
                 </button>
               </div>
@@ -338,24 +172,24 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              style={styles.submitButton}
-              onMouseOver={(e) => (e.target.style.backgroundColor = styles.submitButtonHover.backgroundColor)}
-              onMouseOut={(e) => (e.target.style.backgroundColor = styles.submitButton.backgroundColor)}
+              className="w-full py-2.5 bg-green-600 text-white rounded-lg text-sm font-semibold transition-colors hover:bg-green-700"
             >
               Sign In as {loginType === "user" ? "Customer" : "Seller"}
             </button>
           </form>
 
-          <div style={styles.divider}>
-            <div style={styles.dividerLine}></div>
-            <span style={styles.dividerText}>Or continue with</span>
+          <div className="my-6 text-center relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200" />
+            </div>
+            <div className="relative flex justify-center text-xs">
+              <span className="bg-white px-2 text-gray-500">
+                Or continue with
+              </span>
+            </div>
           </div>
 
-          <button
-            style={styles.googleButton}
-            onMouseOver={(e) => (e.target.style.backgroundColor = "#f9fafb")}
-            onMouseOut={(e) => (e.target.style.backgroundColor = "white")}
-          >
+          <button className="w-full py-2.5 border border-gray-300 bg-white rounded-lg text-sm flex items-center justify-center gap-2 transition-colors hover:bg-gray-50">
             <svg width="18" height="18" viewBox="0 0 24 24">
               <path
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -377,28 +211,34 @@ export default function LoginPage() {
             Continue with Google
           </button>
 
-          <div style={styles.footer}>
+          <div className="mt-6 text-center text-xs text-gray-500">
             {loginType === "user" ? (
               <>
                 Don't have an account?{" "}
-                <a href="/signup" style={styles.link}>
+                <a href="/signup" className="text-green-600 hover:underline">
                   Sign up as Customer
                 </a>
                 <br />
                 <span>or </span>
-                <a href="/seller/signup" style={styles.link}>
+                <a
+                  href="/seller/signup"
+                  className="text-green-600 hover:underline"
+                >
                   Register as Seller
                 </a>
               </>
             ) : (
               <>
                 Don't have a seller account?{" "}
-                <a href="/seller/signup" style={styles.link}>
+                <a
+                  href="/seller/signup"
+                  className="text-green-600 hover:underline"
+                >
                   Register as Seller
                 </a>
                 <br />
                 <span>or </span>
-                <a href="/signup" style={styles.link}>
+                <a href="/signup" className="text-green-600 hover:underline">
                   Sign up as Customer
                 </a>
               </>
@@ -407,6 +247,6 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 

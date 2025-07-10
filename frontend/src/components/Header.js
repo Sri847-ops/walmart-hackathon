@@ -1,34 +1,50 @@
-import { Link, useNavigate } from "react-router-dom"
-import { useCart } from "../context/CartContext"
+import { Link, useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 
 const Header = () => {
-  const { getCartItemsCount } = useCart()
-  const navigate = useNavigate()
+  const { getCartItemsCount } = useCart();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("token")
-    localStorage.removeItem("user")
-    localStorage.removeItem("role")
-    navigate("/login")
-  }
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("role");
+    navigate("/login");
+  };
+
+  const handleThemeChange = (theme) => {
+    document.body.className = theme;
+    localStorage.setItem("theme", theme);
+  };
 
   return (
-    <header className="bg-blue-600 text-white shadow-lg">
+    <header className="bg-card text-card-foreground shadow-md">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link to="/" className="text-2xl font-bold">
+          <Link to="/" className="text-2xl font-bold text-primary">
             🛒 GreenMart
           </Link>
           <nav className="flex items-center space-x-6">
-            <Link to="/" className="hover:text-blue-200 transition-colors">
+            <Link
+              to="/"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
               Home
             </Link>
-            <Link to="/cart" className="flex items-center hover:text-blue-200 transition-colors">
+            <Link
+              to="/cart"
+              className="flex items-center text-muted-foreground hover:text-primary transition-colors"
+            >
               Cart ({getCartItemsCount()})
             </Link>
+            <div className="flex items-center space-x-2">
+              <button onClick={() => handleThemeChange('light')} className="w-4 h-4 rounded-full bg-gray-200"></button>
+              <button onClick={() => handleThemeChange('dark')} className="w-4 h-4 rounded-full bg-gray-800"></button>
+              <button onClick={() => handleThemeChange('green')} className="w-4 h-4 rounded-full bg-green-500"></button>
+            </div>
             <button
               onClick={handleLogout}
-              className="ml-4 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition-colors"
+              className="ml-4 bg-destructive hover:bg-destructive/90 text-destructive-foreground px-3 py-1 rounded-md transition-colors"
             >
               Logout
             </button>
@@ -36,7 +52,7 @@ const Header = () => {
         </div>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
