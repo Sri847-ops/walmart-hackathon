@@ -5,12 +5,14 @@ export const calculateDynamicPrice = (product) => {
     product.reductionPerDay == null ||
     product.initialPrice == null
   ) {
+    // If dynamic pricing is off, always return initialPrice
     return {
-      currentPrice: product.price,
+      currentPrice: product.initialPrice,
       discountPercentage: 0,
     };
   }
 
+  // Dynamic pricing ON: calculate based on expiry
   const daysPassed = product.timeToExpiry;
   const discount = product.initialPrice * product.reductionPerDay * daysPassed;
   const discountedPrice = product.initialPrice - discount;

@@ -32,6 +32,26 @@ const ProductListSeller = () => {
       });
   }, []);
 
+  const handleDelete = async (productId) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await fetch(`http://localhost:5000/api/products/${productId}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      console.log('Delete response:', res.status, data);
+      if (!res.ok) {
+        throw new Error(data.message || 'Failed to delete product');
+      }
+      setProducts((prev) => prev.filter((p) => p._id !== productId));
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div style={{ color: "red" }}>{error}</div>;
   if (products.length === 0) return <div>No products found for this seller.</div>;
@@ -41,7 +61,7 @@ const ProductListSeller = () => {
       <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Manage Your Products</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product) => (
-          <ProductCardSeller key={product._id} product={product} onDelete={() => {}} />
+          <ProductCardSeller key={product._id} product={product} onDelete={() => handleDelete(product._id)} />
         ))}
       </div>
     </div>
