@@ -1,34 +1,20 @@
 'use client';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-
-const calculateDynamicPrice = (product) => {
-  if (
-    !product.dynamicPricing ||
-    product.timeToExpiry == null ||
-    product.reductionPerDay == null
-  ) {
-    return product.price;
-  }
-
-  const daysPassed = Math.max(0, 10 - product.timeToExpiry);
-  const discount = product.initialPrice * product.reductionPerDay * daysPassed;
-  const discountedPrice = product.initialPrice - discount;
-  const minPrice = product.initialPrice * 0.4;
-
-  return Math.max(discountedPrice, minPrice);
-};
+import { useState } from 'react';
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
+  const [quantity, setQuantity] = useState(1);
+  const [added, setAdded] = useState(false);
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    addToCart({ ...product, id: product._id });
+    addToCart({ ...product, id: product._id, quantity });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
   };
-
-  const dynamicPrice = calculateDynamicPrice(product);
 
   return (
     <div className="relative bg-white rounded-2xl overflow-hidden border border-gray-200 transition-all duration-500 ease-out hover:border-transparent hover:scale-[1.02] cursor-pointer group shadow-sm hover:shadow-md">
@@ -69,15 +55,36 @@ const ProductCard = ({ product }) => {
       </Link>
 
       <div className="px-5 pb-5 flex items-center justify-between">
-        <span className="text-2xl font-bold text-green-600 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-green-600 group-hover:to-blue-600">
-          ${dynamicPrice.toFixed(2)}
-        </span>
-        <button
-          onClick={handleAddToCart}
-          className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-lg transition-all transform hover:scale-105 shadow"
-        >
-          Add to Cart
-        </button>
+        <div>
+          {product.discountPercentage > 0 && (
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-500 line-through">
+                ${product.initialPrice.toFixed(2)}
+              </span>
+              <span className="text-xs font-bold text-green-600 bg-green-100 px-2 py-1 rounded-full">
+                {product.discountPercentage}% OFF
+              </span>
+            </div>
+          )}
+          <span className="text-2xl font-bold text-green-600 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-green-600 group-hover:to-blue-600">
+            ${product.price.toFixed(2)}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <input
+            type="number"
+            min="1"
+            value={quantity}
+            onChange={(e) => setQuantity(parseInt(e.target.value))}
+            className="w-16 border-gray-300 border rounded-md p-2 text-center"
+          />
+          <button
+            onClick={handleAddToCart}
+            className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-lg transition-all transform hover:scale-105 shadow"
+          >
+            {added ? "Added!" : "Add to Cart"}
+          </button>
+        </div>
       </div>
     </div>
   );

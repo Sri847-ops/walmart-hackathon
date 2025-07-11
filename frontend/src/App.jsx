@@ -13,6 +13,7 @@ import UserPrivateRoute from "./UserPrivateRoute";
 import SellerPrivateRoute from "./SellerPrivateRoute";
 import SellerEditProduct from "./components/seller/SellerEditProduct";
 import SellerAddProduct from "./components/seller/SellerAddProduct";
+import NgoListPage from "./pages/NgoListPage";
 
 function AppContent() {
   const location = useLocation();
@@ -83,6 +84,14 @@ function AppContent() {
           element={
             <SellerPrivateRoute>
               <SellerAddProduct />
+            </SellerPrivateRoute>
+          }
+        />
+        <Route
+          path="/seller/donate"
+          element={
+            <SellerPrivateRoute>
+              <NgoListPage />
             </SellerPrivateRoute>
           }
         />
