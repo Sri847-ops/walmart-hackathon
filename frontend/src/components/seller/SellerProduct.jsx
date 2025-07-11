@@ -39,7 +39,7 @@ const SellerProduct = () => {
   };
 
   const handleDonate = () => {
-    alert(`Donated "${product.name}" to NGOs!`);
+    navigate('/seller/donate', { state: { product } });
   };
 
   const toggleDynamicPricing = async () => {
