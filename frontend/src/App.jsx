@@ -11,6 +11,7 @@ import LoginPage from "./pages/LoginPage";
 import PrivateRoutes from "./PrivateRoute";
 import UserPrivateRoute from "./UserPrivateRoute";
 import SellerPrivateRoute from "./SellerPrivateRoute";
+import SellerEditProduct from "./components/seller/SellerEditProduct";
 
 function AppContent() {
   const location = useLocation();
@@ -65,6 +66,14 @@ function AppContent() {
           element={
             <SellerPrivateRoute>
               <SellerProduct />
+            </SellerPrivateRoute>
+          }
+        />
+        <Route
+          path="/seller/edit/:id"
+          element={
+            <SellerPrivateRoute>
+              <SellerEditProduct />
             </SellerPrivateRoute>
           }
         />

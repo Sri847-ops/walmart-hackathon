@@ -10,6 +10,7 @@ const productSchema = new mongoose.Schema({
   timeToExpiry: Number,
   reductionPerDay: Number,
   dynamicPricing: Boolean,
+  imageUrl: String,
   seller: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Seller"
