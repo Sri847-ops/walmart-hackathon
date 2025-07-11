@@ -12,6 +12,7 @@ import PrivateRoutes from "./PrivateRoute";
 import UserPrivateRoute from "./UserPrivateRoute";
 import SellerPrivateRoute from "./SellerPrivateRoute";
 import SellerEditProduct from "./components/seller/SellerEditProduct";
+import SellerAddProduct from "./components/seller/SellerAddProduct";
 
 function AppContent() {
   const location = useLocation();
@@ -74,6 +75,14 @@ function AppContent() {
           element={
             <SellerPrivateRoute>
               <SellerEditProduct />
+            </SellerPrivateRoute>
+          }
+        />
+        <Route
+          path="/seller/products/add"
+          element={
+            <SellerPrivateRoute>
+              <SellerAddProduct />
             </SellerPrivateRoute>
           }
         />

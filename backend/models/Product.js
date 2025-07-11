@@ -11,12 +11,10 @@ const productSchema = new mongoose.Schema({
   reductionPerDay: Number,
   dynamicPricing: Boolean,
   imageUrl: String,
-  seller: {
+  sellerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Seller"
   }
 })
-
-
 
 export default mongoose.model("Product", productSchema)
