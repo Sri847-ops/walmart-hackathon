@@ -98,4 +98,49 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// POST /api/products
+router.post("/", async (req, res) => {
+  try {
+    const {
+      name,
+      description,
+      packaging,
+      shipping,
+      initialPrice,
+      timeToExpiry,
+      reductionPerDay,
+      imageUrl,
+      sellerId
+    } = req.body;
+    if (!name || !description || !packaging || !shipping || !initialPrice || !timeToExpiry || !reductionPerDay || !imageUrl || !sellerId) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+    const product = new Product({
+      name,
+      description,
+      packaging,
+      shipping,
+      initialPrice,
+      price: initialPrice, // Always set price
+      timeToExpiry,
+      reductionPerDay,
+      imageUrl,
+      sellerId, // Store as 'sellerId' in the model
+      dynamicPricing: false
+    });
+    await product.save();
+    // Prepare response object
+    const productObj = product.toObject();
+    productObj.price = productObj.initialPrice; // Ensure price is present and correct
+    delete productObj.__v;
+    if (productObj.sellerId === undefined && productObj.seller !== undefined) {
+      productObj.sellerId = productObj.seller;
+      delete productObj.seller;
+    }
+    res.status(201).json(productObj);
+  } catch (error) {
+    res.status(500).json({ message: "Error adding product", error });
+  }
+});
+
 export default router;

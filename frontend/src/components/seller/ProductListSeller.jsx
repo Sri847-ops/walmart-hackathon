@@ -1,11 +1,14 @@
 // src/pages/ProductListSeller.jsx
 import { useEffect, useState } from "react";
 import ProductCardSeller from "./ProductCardSeller";
+import AddProductCard from "./AddProductCard";
+import { useNavigate } from "react-router-dom";
 
 const ProductListSeller = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -60,6 +63,7 @@ const ProductListSeller = () => {
     <div className="container mx-auto px-4 py-8">
       <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Manage Your Products</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <AddProductCard onAddProduct={() => navigate('/seller/products/add')} />
         {products.map((product) => (
           <ProductCardSeller key={product._id} product={product} onDelete={() => handleDelete(product._id)} />
         ))}
