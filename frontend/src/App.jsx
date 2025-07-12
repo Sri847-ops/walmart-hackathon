@@ -14,10 +14,12 @@ import SellerPrivateRoute from "./SellerPrivateRoute";
 import SellerEditProduct from "./components/seller/SellerEditProduct";
 import SellerAddProduct from "./components/seller/SellerAddProduct";
 import NgoListPage from "./pages/NgoListPage";
+import Footer from "./components/Footer";
 
 function AppContent() {
   const location = useLocation();
   const hideHeader = location.pathname === "/login";
+  const hideFooter = location.pathname === "/login";
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";
@@ -96,6 +98,11 @@ function AppContent() {
           }
         />
       </Routes>
+      <br />
+      <br />
+      <br />
+      <br />
+      {!hideFooter && <Footer />}
     </div>
   );
 }
