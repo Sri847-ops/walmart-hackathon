@@ -5,6 +5,7 @@ import connectDB from "./config/db.js"
 import greenScoreRoutes from "./routes/greenScore.js"
 import productRoutes from "./routes/productRoutes.js" // Add this import
 import authRoutes from "./routes/auth.js" // Import auth routes if needed
+import orderRoutes from "./routes/orderRoutes.js"
 import { OpenAI } from "openai"
 
 // Load environment variables
@@ -24,6 +25,7 @@ app.use(express.json())
 app.use("/api/green-score", greenScoreRoutes)
 app.use("/api/products", productRoutes) // Add this line after your other app.use() routes
 app.use("/api/auth", authRoutes)
+app.use("/api/orders", orderRoutes)
 // Basic route
 app.get("/", (req, res) => {
   res.json({ message: "Walmart Green E-commerce Backend API" })

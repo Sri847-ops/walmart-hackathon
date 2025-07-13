@@ -3,11 +3,13 @@
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import GreenScoreResults from '../components/GreenScoreResults';
+import { useNavigate } from 'react-router-dom';
 
 const CartPage = () => {
-  const { items, updateQuantity, removeFromCart, getCartTotal } = useCart();
+  const { items, updateQuantity, removeFromCart, getCartTotal, clearCart } = useCart();
   const [greenScore, setGreenScore] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const calculateGreenScore = async () => {
     setLoading(true);
@@ -38,6 +40,39 @@ const CartPage = () => {
       setLoading(false);
     }
   };
+
+  const handleCheckout = async () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+        alert('You must be logged in to check out.');
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: user.id,
+                products: items.map(item => ({ productId: item.id, quantity: item.quantity, price: item.price })),
+                totalAmount: getCartTotal(),
+            }),
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            clearCart();
+            navigate(`/order-confirmation/${data.orderId}`);
+        } else {
+            alert(data.message || 'Checkout failed. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error during checkout:', error);
+        alert('An error occurred during checkout. Please try again.');
+    }
+};
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -110,7 +145,7 @@ const CartPage = () => {
               {loading ? 'Calculating...' : 'Calculate Green Score'}
             </button>
 
-            <button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-4 rounded-lg">
+            <button onClick={handleCheckout} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-4 rounded-lg">
               Proceed to Checkout
             </button>
           </div>

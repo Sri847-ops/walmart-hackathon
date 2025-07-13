@@ -15,6 +15,7 @@ import SellerEditProduct from "./components/seller/SellerEditProduct";
 import SellerAddProduct from "./components/seller/SellerAddProduct";
 import NgoListPage from "./pages/NgoListPage";
 import Footer from "./components/Footer";
+import OrderConfirmationPage from './pages/OrderConfirmationPage';
 
 function AppContent() {
   const location = useLocation();
@@ -45,6 +46,14 @@ function AppContent() {
           element={
             <UserPrivateRoute>
               <CartPage />
+            </UserPrivateRoute>
+          }
+        />
+        <Route
+          path="/order-confirmation/:orderId"
+          element={
+            <UserPrivateRoute>
+              <OrderConfirmationPage />
             </UserPrivateRoute>
           }
         />
